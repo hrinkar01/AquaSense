@@ -8,20 +8,6 @@ from tensorflow.keras.layers import Dense, Dropout # type: ignore
 from tensorflow.keras.utils import to_categorical # type: ignore
 
 def classify_water_quality(ph, turbidity, tds, latitude, longitude):
-    """
-    Classify water quality based on multiple parameters
-    
-    Args:
-    ph (float): pH level
-    turbidity (float): Water turbidity
-    tds (float): Total Dissolved Solids
-    latitude (float): Latitude coordinate
-    longitude (float): Longitude coordinate
-    
-    Returns:
-    str: Water quality classification
-    """
-    # Drinking Water Criteria (based on WHO guidelines)
     def is_drinkable():
         # Strict drinking water conditions
         if (6.5 <= ph <= 8.5 and  # pH range
@@ -59,15 +45,6 @@ def classify_water_quality(ph, turbidity, tds, latitude, longitude):
         return "Unusable (Requires Treatment)"
 
 def prepare_classification_model(data):
-    """
-    Prepare and train a water quality classification model
-    
-    Args:
-    data (pd.DataFrame): Input water quality data
-    
-    Returns:
-    tuple: Trained model, scalers, and classification mapping
-    """
     # Add classification column
     data['category'] = data.apply(
         lambda row: classify_water_quality(
@@ -133,18 +110,6 @@ def prepare_classification_model(data):
     return model, scaler_features, category_mapping
 
 def predict_water_quality_category(model, scaler, data, months_to_predict=3):
-    """
-    Predict water quality categories for future months
-    
-    Args:
-    model (keras.Model): Trained classification model
-    scaler (StandardScaler): Feature scaler
-    data (pd.DataFrame): Historical water quality data
-    months_to_predict (int): Number of months to predict
-    
-    Returns:
-    pd.DataFrame: Predicted water quality categories
-    """
     # Use the last available data for prediction
     last_data = data.iloc[-1]
     
